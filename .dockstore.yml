@@ -1,0 +1,7 @@
+version: 1.2
+workflows:
+   - name: convert_build
+     subclass: WDL
+     primaryDescriptorPath: /convert_build.wdl
+     testParameterFiles:
+         - /convert_build.json
