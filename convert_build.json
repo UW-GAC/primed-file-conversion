@@ -1,0 +1,6 @@
+{
+    "convert_build.vcf_file": "https://github.com/zhengxwen/SeqArray/raw/master/inst/extdata/CEU_Exon.vcf.gz",
+    "convert_build.chain_file": "gs://gtex-resources/references/hg19ToHg38.patched.over.chain",
+    "convert_build.fasta_file": "gs://genomics-public-data/resources/broad/hg38/v0/Homo_sapiens_assembly38.fasta",
+    "convert_build.out_prefix": "test"
+}
