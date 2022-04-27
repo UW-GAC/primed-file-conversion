@@ -40,10 +40,14 @@ task results {
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
 
     command {
-        /plink2  \
+        /plink2 \
             --bed ${bed_file} \
             --bim ${bim_file} \
             --fam ${fam_file} \
+            --make-bed --sort-vars
+            --out sorted
+        /plink2 \
+            --bfile sorted \
             --export vcf id-paste=iid bgz ${fasta_string} \
             --out ${out_string}
     }
