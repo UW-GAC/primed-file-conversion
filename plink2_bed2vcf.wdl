@@ -9,16 +9,16 @@ workflow plink2_bed2vcf {
         String? out_prefix
     }
 
-    call convert_bed_vcf {
-        input bed_file = bed_file,
-              bim_file = bim_file,
-              fam_file = fam_file,
-              fasta_file = fasta_file,
-              out_prefix = out_prefix
+    call results {
+        input: bed_file = bed_file,
+               bim_file = bim_file,
+               fam_file = fam_file,
+               fasta_file = fasta_file,
+               out_prefix = out_prefix
     }
 
     output {
-        File vcf_file = convert_bed_vcf.vcf_file
+        File out_file = results.out_file
     }
 
      meta {
@@ -27,7 +27,7 @@ workflow plink2_bed2vcf {
      }
 }
 
-task convert_bed_vcf {
+task results {
     input {
         File bed_file
         File bim_file
