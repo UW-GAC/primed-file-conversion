@@ -36,7 +36,7 @@ task results {
         String? out_prefix
     }
 
-    String fasta_string = if defined(fasta_file) then "--ref-from-fa" + fasta_file else ""
+    String fasta_string = if defined(fasta_file) then "--ref-from-fa " + fasta_file else ""
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
 
     command {
