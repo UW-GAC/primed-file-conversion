@@ -5,7 +5,6 @@ workflows:
      primaryDescriptorPath: /plink2_bed2vcf.wdl
      testParameterFiles:
          - /plink2_bed2vcf.json
-workflows:
    - name: convert_build
      subclass: WDL
      primaryDescriptorPath: /convert_build.wdl
