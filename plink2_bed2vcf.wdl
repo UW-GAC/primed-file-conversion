@@ -36,7 +36,7 @@ task results {
         String? out_prefix
     }
 
-    String fasta_string = if defined(fasta_file) then "--ref-from-fa " + fasta_file else ""
+    String fasta_string = if defined(fasta_file) then "--ref-from-fa --fa " + fasta_file else ""
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
 
     command {
@@ -44,12 +44,13 @@ task results {
             --bed ${bed_file} \
             --bim ${bim_file} \
             --fam ${fam_file} \
-            --make-bed --sort-vars \
+            --make-pgen --sort-vars \
             --out sorted
         /plink2 \
-            --bfile sorted \
+            --pfile sorted \
             --export vcf id-paste=iid bgz ${fasta_string} \
             --out ${out_string}
+        rm sorted.*
     }
 
     output {
