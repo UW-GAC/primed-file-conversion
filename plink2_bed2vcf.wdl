@@ -37,7 +37,7 @@ task results {
     }
 
     String fasta_string = if defined(fasta_file) then "--ref-from-fa" + fasta_file else ""
-    String out_string = if defined(out_prefix) then out_prefix else basename(bed_file)
+    String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
 
     command {
         /plink2  \
@@ -49,7 +49,7 @@ task results {
     }
 
     output {
-        File out_file = "${out_prefix}.vcf.gz"
+        File out_file = "${out_string}.vcf.gz"
     }
 
     runtime {
