@@ -44,7 +44,7 @@ task results {
             --bed ${bed_file} \
             --bim ${bim_file} \
             --fam ${fam_file} \
-            --make-bed --sort-vars
+            --make-bed --sort-vars \
             --out sorted
         /plink2 \
             --bfile sorted \
