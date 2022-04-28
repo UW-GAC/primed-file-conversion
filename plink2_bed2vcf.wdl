@@ -36,7 +36,6 @@ task results {
         String? out_prefix
     }
 
-    String fasta_string = if defined(fasta_file) then "--ref-from-fa --fa ${fasta_file}" else ""
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
 
     command {
@@ -48,7 +47,7 @@ task results {
             --out sorted
         /plink2 \
             --pfile sorted \
-            --export vcf id-paste=iid bgz ${fasta_string} \
+            --export vcf id-paste=iid bgz ${"--ref-from-fa --fa " + fasta_file} \
             --out ${out_string}
         rm sorted.*
     }
