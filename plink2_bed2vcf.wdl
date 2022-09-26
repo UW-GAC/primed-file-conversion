@@ -57,6 +57,6 @@ task results {
     }
 
     runtime {
-        docker: "quay.io/large-scale-gxe-methods/plink2-workflow:latest"
+        docker: "uwgac/plink2:20220814"
     }
 }
