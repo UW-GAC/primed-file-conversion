@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM uwgac/ubuntu-18.04-hpc:latest
 
 RUN apt-get update && apt-get install -y \
     wget \
