@@ -1,7 +1,7 @@
 {
-    "plink2_bed2vcf.bed_file": "gs://fc-5c335881-c450-4352-b2ba-79809add9f91/hapmap3_r3_b37_fwd.consensus.qc.poly_Ilmn1M.bed",
-    "plink2_bed2vcf.bim_file": "gs://fc-5c335881-c450-4352-b2ba-79809add9f91/hapmap3_r3_b37_fwd.consensus.qc.poly_Ilmn1M.bim",
-    "plink2_bed2vcf.fam_file": "gs://fc-5c335881-c450-4352-b2ba-79809add9f91/hapmap3_r3_b37_fwd.consensus.qc.poly_Ilmn1M.fam",
+    "plink2_bed2vcf.bed_file": "gs://fc-6c9cb609-9aaf-4e21-b977-2d569cdadabf/hapmap3_r3_b37_fwd.consensus.qc.poly_Ilmn1M.bed",
+    "plink2_bed2vcf.bim_file": "gs://fc-6c9cb609-9aaf-4e21-b977-2d569cdadabf/hapmap3_r3_b37_fwd.consensus.qc.poly_Ilmn1M.bim",
+    "plink2_bed2vcf.fam_file": "gs://fc-6c9cb609-9aaf-4e21-b977-2d569cdadabf/hapmap3_r3_b37_fwd.consensus.qc.poly_Ilmn1M.fam",
     "plink2_bed2vcf.fasta_file": "gs://genomics-public-data/references/GRCh37lite/GRCh37-lite.fa.gz",
     "plink2_bed2vcf.out_prefix": "hapmap3_r3_b37_Ilmn1M"
 }
