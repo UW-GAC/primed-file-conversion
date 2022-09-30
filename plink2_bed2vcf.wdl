@@ -19,6 +19,7 @@ workflow plink2_bed2vcf {
 
     output {
         File out_file = results.out_file
+        String md5sum = results.md5sum
     }
 
      meta {
@@ -50,10 +51,12 @@ task results {
             --export vcf id-paste=iid bgz ${"--ref-from-fa --fa " + fasta_file} \
             --out ${out_string}
         rm sorted.*
+        md5sum ${out_string}.vcf.gz | cut -d " " -f 1 > md5.txt
     }
 
     output {
         File out_file = "${out_string}.vcf.gz"
+        String md5sum = read_string("md5.txt")
     }
 
     runtime {
