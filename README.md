@@ -21,3 +21,37 @@ Outputs:
 output | description
 --- | ---
 out_file | VCF file
+
+
+## liftover_vcf
+
+This workflow uses [GATK Picard](https://gatk.broadinstitute.org/hc/en-us/articles/9570440033179-LiftoverVcf-Picard-) to lift over VCF files from one build to another.
+
+[Human genome reference builds](https://gatk.broadinstitute.org/hc/en-us/articles/360035890951)
+
+[Build 37 vs hg19 explained](https://gatk.broadinstitute.org/hc/en-us/articles/360035890711-GRCh37-hg19-b37-humanG1Kv37-Human-Reference-Discrepancies)
+
+[Reference fasta files on Google Cloud Storage](https://console.cloud.google.com/storage/browser/genomics-public-data/references)
+
+Chain files:
+
+- [hg17 to hg38](https://hgdownload.soe.ucsc.edu/goldenPath/hg17/liftOver/hg17ToHg38.over.chain.gz)
+- [hg18 to hg38](https://hgdownload.cse.ucsc.edu/goldenpath/hg18/liftOver/hg18ToHg38.over.chain.gz)
+- [hg19 to hg38](https://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz)
+- [b37 to hg38](https://raw.githubusercontent.com/broadinstitute/gatk/master/scripts/funcotator/data_sources/gnomAD/b37ToHg38.over.chain)
+
+
+Inputs:
+
+input | description
+--- | ---
+vcf_file | VCF file
+chain_url | URL for chain file
+target_fasta | fasta file with referce sequence for target build
+out_prefix | prefix for output file (.vcf.gz will be appended)
+
+Outputs:
+
+output | description
+--- | ---
+out_file | VCF file with coordinates in target build

@@ -1,0 +1,6 @@
+{
+    "liftover_vcf.vcf_file": "gs://gcp-public-data--broad-references/hg19/v0/1000G_omni2.5.b37.vcf.gz",
+    "liftover_vcf.chain_url": "https://raw.githubusercontent.com/broadinstitute/gatk/master/scripts/funcotator/data_sources/gnomAD/b37ToHg38.over.chain",
+    "liftover_vcf.target_fasta": "gs://gcp-public-data--broad-references/hg38/v0/Homo_sapiens_assembly38.fasta",
+    "liftover_vcf.out_prefix": "1000G_omni2.5_hg38"
+}
