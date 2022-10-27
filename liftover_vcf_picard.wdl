@@ -35,9 +35,9 @@ task results {
 
     command {
         curl ${chain_url} --output chain.gz
-        java -jar /usr/picard/picard.jar CreateSequenceDictionary \
+        java -jar /usr/picard/picard.jar -mem $MEM_UNIT $MEM_SIZE CreateSequenceDictionary \
             --REFERENCE ${target_fasta}
-        java -jar /usr/picard/picard.jar LiftoverVcf \ 
+        java -jar /usr/picard/picard.jar -mem $MEM_UNIT $MEM_SIZE LiftoverVcf \ 
             --CHAIN chain.gz \ 
             --INPUT ${vcf_file} \ 
             --OUTPUT ${out_prefix}.vcf \ 
@@ -52,5 +52,6 @@ task results {
 
     runtime {
         docker: "broadinstitute/picard:2.27.5"
+        memory: "16GB"
     }
 }
