@@ -37,11 +37,11 @@ task results {
         curl ${chain_url} --output chain.gz
         java -jar /usr/picard/picard.jar CreateSequenceDictionary \
             --REFERENCE ${target_fasta}
-        java -jar /usr/picard/picard.jar LiftoverVcf \ 
-            --CHAIN chain.gz \ 
-            --INPUT ${vcf_file} \ 
-            --OUTPUT ${out_prefix}.vcf \ 
-            --REJECT rejected_variants.vcf \ 
+        java -jar /usr/picard/picard.jar LiftoverVcf \
+            --CHAIN chain.gz \
+            --INPUT ${vcf_file} \
+            --OUTPUT ${out_prefix}.vcf.gz \
+            --REJECT rejected_variants.vcf \
             --REFERENCE_SEQUENCE ${target_fasta} \
             --RECOVER_SWAPPED_REF_ALT true
     }
