@@ -35,9 +35,9 @@ task results {
 
     command {
         curl ${chain_url} --output chain.gz
-        java -jar /usr/picard/picard.jar -mem $MEM_UNIT $MEM_SIZE CreateSequenceDictionary \
+        java -jar /usr/picard/picard.jar CreateSequenceDictionary \
             --REFERENCE ${target_fasta}
-        java -jar /usr/picard/picard.jar -mem $MEM_UNIT $MEM_SIZE LiftoverVcf \ 
+        java -jar /usr/picard/picard.jar LiftoverVcf \ 
             --CHAIN chain.gz \ 
             --INPUT ${vcf_file} \ 
             --OUTPUT ${out_prefix}.vcf \ 
