@@ -35,7 +35,7 @@ task results {
 
     command {
         curl ${chain_url} --output chain.gz
-        java -jar picard.jar CreateSequenceDictionary \
+        java -jar /usr/picard/picard.jar CreateSequenceDictionary \
             --REFERENCE ${target_fasta}
         java -jar /usr/picard/picard.jar LiftoverVcf \ 
             --CHAIN chain.gz \ 
