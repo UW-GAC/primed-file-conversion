@@ -33,12 +33,14 @@ task results {
         String out_prefix
     }
 
+    String chain_file = basename(chain_url)
+
     command {
-        curl ${chain_url} --output chain.gz
+        curl ${chain_url} --output ${chain_file}
         java -jar /usr/picard/picard.jar CreateSequenceDictionary \
             --REFERENCE ${target_fasta}
         java -jar /usr/picard/picard.jar LiftoverVcf \
-            --CHAIN chain.gz \
+            --CHAIN ${chain_file} \
             --INPUT ${vcf_file} \
             --OUTPUT ${out_prefix}.vcf.gz \
             --REJECT rejected_variants.vcf \
