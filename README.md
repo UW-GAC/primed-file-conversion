@@ -6,6 +6,8 @@ PRIMED file conversion workflows
 
 This workflow uses [plink2](https://www.cog-genomics.org/plink/2.0/) to convert a file from binary PLINK format (bed/bim/fam) to VCF.
 
+If using a fasta file, run the workflow with [reference disks enabled](https://support.terra.bio/hc/en-us/articles/360056384631).
+
 Inputs:
 
 input | description
@@ -13,6 +15,7 @@ input | description
 bed_file | plink bed file
 bim_file | plink bim file
 fam_file | plink fam file
+snps_only | boolean for whether to filter output file to SNPs only
 fasta_file | (optional) fasta file. If provided, plink2 attempts to assign ref and alt alleles according to the reference genome.
 out_prefix | (optional) prefix for output vcf file. If not provided, taken from the input bed filename.
 
@@ -25,7 +28,7 @@ out_file | VCF file
 
 ## liftover_vcf
 
-This workflow uses [GATK Picard](https://gatk.broadinstitute.org/hc/en-us/articles/9570440033179-LiftoverVcf-Picard-) to lift over VCF files from one build to another.
+This workflow uses [GATK Picard](https://gatk.broadinstitute.org/hc/en-us/articles/9570440033179-LiftoverVcf-Picard-) to lift over VCF files from one build to another. Run the workflow with [reference disks enabled](https://support.terra.bio/hc/en-us/articles/360056384631).
 
 [Human genome reference builds](https://gatk.broadinstitute.org/hc/en-us/articles/360035890951)
 

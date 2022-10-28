@@ -7,6 +7,7 @@ workflow plink2_bed2vcf {
         File fam_file
         File? fasta_file
         String? out_prefix
+        Boolean snps_only
     }
 
     call results {
@@ -14,7 +15,8 @@ workflow plink2_bed2vcf {
                bim_file = bim_file,
                fam_file = fam_file,
                fasta_file = fasta_file,
-               out_prefix = out_prefix
+               out_prefix = out_prefix,
+               snps_only = snps_only
     }
 
     output {
@@ -35,6 +37,7 @@ task results {
         File fam_file
         File? fasta_file
         String? out_prefix
+        Boolean snps_only
     }
 
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
@@ -44,7 +47,7 @@ task results {
             --bed ${bed_file} \
             --bim ${bim_file} \
             --fam ${fam_file} \
-            --make-pgen --sort-vars \
+            --make-pgen --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only} \
             --out sorted
         plink2 \
             --pfile sorted \
