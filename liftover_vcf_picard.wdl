@@ -17,6 +17,7 @@ workflow liftover_vcf {
 
     output {
         File out_file = results.out_file
+        File rejects_file = results.rejects_file
     }
 
      meta {
@@ -43,7 +44,7 @@ task results {
             --CHAIN ${chain_file} \
             --INPUT ${vcf_file} \
             --OUTPUT ${out_prefix}.vcf.gz \
-            --REJECT rejected_variants.vcf \
+            --REJECT rejected_variants.vcf.gz \
             --REFERENCE_SEQUENCE ${target_fasta} \
             --RECOVER_SWAPPED_REF_ALT true \
             --ALLOW_MISSING_FIELDS_IN_HEADER true
@@ -51,6 +52,7 @@ task results {
 
     output {
         File out_file = "${out_prefix}.vcf.gz"
+        File rejects_file = "rejected_variants.vcf.gz"
     }
 
     runtime {

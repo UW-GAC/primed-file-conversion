@@ -58,3 +58,4 @@ Outputs:
 output | description
 --- | ---
 out_file | VCF file with coordinates in target build
+rejects_file | VCF file with variants that could not be lifted over
