@@ -45,7 +45,8 @@ task results {
             --OUTPUT ${out_prefix}.vcf.gz \
             --REJECT rejected_variants.vcf \
             --REFERENCE_SEQUENCE ${target_fasta} \
-            --RECOVER_SWAPPED_REF_ALT true
+            --RECOVER_SWAPPED_REF_ALT true \
+            --ALLOW_MISSING_FIELDS_IN_HEADER true
     }
 
     output {
