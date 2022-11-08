@@ -58,6 +58,6 @@ task results {
     runtime {
         docker: "broadinstitute/picard:2.27.5"
         memory: "30GB"
-        maxRetries: 2
+        maxRetries: 3
     }
 }
