@@ -47,7 +47,8 @@ task results {
             --REJECT rejected_variants.vcf.gz \
             --REFERENCE_SEQUENCE ${target_fasta} \
             --RECOVER_SWAPPED_REF_ALT true \
-            --ALLOW_MISSING_FIELDS_IN_HEADER true
+            --ALLOW_MISSING_FIELDS_IN_HEADER true \
+            --MAX_RECORDS_IN_RAM 100000
     }
 
     output {
