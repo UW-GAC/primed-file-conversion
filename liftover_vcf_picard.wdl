@@ -6,13 +6,15 @@ workflow liftover_vcf {
         String chain_url
         File target_fasta
         String out_prefix
+        Int? mem_gb
     }
 
     call results {
         input: vcf_file = vcf_file,
                chain_url = chain_url,
                target_fasta = target_fasta,
-               out_prefix = out_prefix
+               out_prefix = out_prefix,
+               mem_gb = mem_gb
     }
 
     output {
@@ -32,15 +34,16 @@ task results {
         String chain_url
         File target_fasta
         String out_prefix
+        Int mem_gb = 16
     }
 
     String chain_file = basename(chain_url)
 
     command {
         curl ${chain_url} --output ${chain_file}
-        java -jar /usr/picard/picard.jar CreateSequenceDictionary \
+        java -Xmx${mem_gb}g -jar /usr/picard/picard.jar CreateSequenceDictionary \
             --REFERENCE ${target_fasta}
-        java -jar /usr/picard/picard.jar LiftoverVcf \
+        java -Xmx${mem_gb}g -jar /usr/picard/picard.jar LiftoverVcf \
             --CHAIN ${chain_file} \
             --INPUT ${vcf_file} \
             --OUTPUT ${out_prefix}.vcf.gz \
@@ -48,7 +51,7 @@ task results {
             --REFERENCE_SEQUENCE ${target_fasta} \
             --RECOVER_SWAPPED_REF_ALT true \
             --ALLOW_MISSING_FIELDS_IN_HEADER true \
-            --MAX_RECORDS_IN_RAM 100000
+            --MAX_RECORDS_IN_RAM 10000
     }
 
     output {
@@ -58,7 +61,6 @@ task results {
 
     runtime {
         docker: "broadinstitute/picard:2.27.5"
-        memory: "30GB"
-        maxRetries: 3
+        memory: "${mem_gb}GB"
     }
 }
