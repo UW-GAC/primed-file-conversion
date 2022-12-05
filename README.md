@@ -16,6 +16,7 @@ bed_file | plink bed file
 bim_file | plink bim file
 fam_file | plink fam file
 snps_only | boolean for whether to filter output file to SNPs only
+chr_prefix | boolean for whether to add a 'chr' prefix, e.g. chr1, chr2, chrX vs 1, 2, X
 fasta_file | (optional) fasta file. If provided, plink2 attempts to assign ref and alt alleles according to the reference genome.
 out_prefix | (optional) prefix for output vcf file. If not provided, taken from the input bed filename.
 

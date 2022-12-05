@@ -8,6 +8,7 @@ workflow plink2_bed2vcf {
         File? fasta_file
         String? out_prefix
         Boolean snps_only
+        Boolean chr_prefix
     }
 
     call results {
@@ -16,7 +17,8 @@ workflow plink2_bed2vcf {
                fam_file = fam_file,
                fasta_file = fasta_file,
                out_prefix = out_prefix,
-               snps_only = snps_only
+               snps_only = snps_only,
+               chr_prefix = chr_prefix
     }
 
     output {
@@ -38,6 +40,7 @@ task results {
         File? fasta_file
         String? out_prefix
         Boolean snps_only
+        Boolean chr_prefix
     }
 
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
@@ -47,12 +50,11 @@ task results {
             --bed ${bed_file} \
             --bim ${bim_file} \
             --fam ${fam_file} \
-            --make-pgen --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only} \
-            --out sorted
+            --make-pgen --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only}
         plink2 \
             --pfile sorted \
             --export vcf id-paste=iid bgz ${"--ref-from-fa --fa " + fasta_file} \
-            --out ${out_string}
+            --out ${out_string} ${true="--output-chr chrM" false="" chr_prefix}
         rm sorted.*
         md5sum ${out_string}.vcf.gz | cut -d " " -f 1 > md5.txt
     }
