@@ -50,7 +50,8 @@ task results {
             --bed ${bed_file} \
             --bim ${bim_file} \
             --fam ${fam_file} \
-            --make-pgen --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only}
+            --make-pgen --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only} \
+            --out sorted
         plink2 \
             --pfile sorted \
             --export vcf id-paste=iid bgz ${"--ref-from-fa --fa " + fasta_file} \
