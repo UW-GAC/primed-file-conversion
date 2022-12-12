@@ -68,6 +68,6 @@ task results {
     }
 
     runtime {
-        docker: "uwgac/plink2:20220814"
+        docker: "quay.io/biocontainers/plink2:2.00a3.3--hb2a7ceb_0"
     }
 }
