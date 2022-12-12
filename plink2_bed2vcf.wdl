@@ -51,8 +51,8 @@ task results {
             --bim ${bim_file} \
             --fam ${fam_file} \
             --make-pgen \
-	    --merge-x \
-	    --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only} \
+            --merge-x \
+            --sort-vars ${true="--snps-only 'just-acgt'" false="" snps_only} \
             --out sorted
         plink2 \
             --pfile sorted \
