@@ -9,7 +9,7 @@ workflow liftover_vcf {
         Int? mem_gb
     }
 
-    call results {
+    call picard {
         input: vcf_file = vcf_file,
                chain_url = chain_url,
                target_fasta = target_fasta,
@@ -17,9 +17,23 @@ workflow liftover_vcf {
                mem_gb = mem_gb
     }
 
+    call strand_flip {
+        input: vcf_file = picard.out_file,
+               rejects_file = picard.rejects_file,
+               out_prefix = out_prefix
+    }
+
+    call picard as picard2 {
+        input: vcf_file = strand_flip.out_file,
+               chain_url = chain_url,
+               target_fasta = target_fasta,
+               out_prefix = out_prefix,
+               mem_gb = mem_gb
+    }
+
     output {
-        File out_file = results.out_file
-        File rejects_file = results.rejects_file
+        File out_file = picard2.out_file
+        File rejects_file = picard2.rejects_file
     }
 
      meta {
@@ -28,7 +42,7 @@ workflow liftover_vcf {
     }
 }
 
-task results {
+task picard {
     input {
         File vcf_file
         String chain_url
@@ -39,28 +53,58 @@ task results {
 
     String chain_file = basename(chain_url)
 
-    command {
-        curl ${chain_url} --output ${chain_file}
-        java -Xmx${mem_gb}g -jar /usr/picard/picard.jar CreateSequenceDictionary \
-            --REFERENCE ${target_fasta}
-        java -Xmx${mem_gb}g -jar /usr/picard/picard.jar LiftoverVcf \
-            --CHAIN ${chain_file} \
-            --INPUT ${vcf_file} \
-            --OUTPUT ${out_prefix}.vcf.gz \
+    command <<<
+        curl ~{chain_url} --output ~{chain_file}
+        java -Xmx~{mem_gb}g -jar /usr/picard/picard.jar CreateSequenceDictionary \
+            --REFERENCE ~{target_fasta}
+        java -Xmx~{mem_gb}g -jar /usr/picard/picard.jar LiftoverVcf \
+            --CHAIN ~{chain_file} \
+            --INPUT ~{vcf_file} \
+            --OUTPUT ~{out_prefix}.vcf.gz \
             --REJECT rejected_variants.vcf.gz \
-            --REFERENCE_SEQUENCE ${target_fasta} \
+            --REFERENCE_SEQUENCE ~{target_fasta} \
             --RECOVER_SWAPPED_REF_ALT true \
             --ALLOW_MISSING_FIELDS_IN_HEADER true \
             --MAX_RECORDS_IN_RAM 10000
-    }
+    >>>
 
     output {
-        File out_file = "${out_prefix}.vcf.gz"
+        File out_file = "~{out_prefix}.vcf.gz"
         File rejects_file = "rejected_variants.vcf.gz"
     }
 
     runtime {
         docker: "broadinstitute/picard:2.27.5"
-        memory: "${mem_gb}GB"
+        memory: "~{mem_gb}GB"
+    }
+}
+
+task strand_flip {
+    input {
+        File vcf_file
+        File rejects_file
+        String out_prefix
+    }
+
+    command <<<
+        has_chr=$(zcat ~{vcf_file} | grep -F 'contig=<ID=chr' -c -m 1)
+        if [ "$has_chr" -gt 0 ]
+        then
+            chr_prefix='chrM'
+        else
+            chr_prefix='M'
+        fi
+        zcat ~{rejects_file} | cut -f3 > flip.txt
+        plink --vcf ~{vcf_file} --double-id \
+            --flip flip.txt --output-chr $chr_prefix \
+            --recode vcf-iid bgz --out ~{out_prefix}
+    >>>
+
+    output {
+        File out_file = "~{out_prefix}.vcf.gz"
+    }
+
+    runtime {
+        docker: "quay.io/biocontainers/plink:1.90b6.21--hec16e2b_2"
     }
 }
