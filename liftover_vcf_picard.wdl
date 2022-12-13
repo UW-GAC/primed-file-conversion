@@ -31,9 +31,17 @@ workflow liftover_vcf {
                mem_gb = mem_gb
     }
 
+    if (picard2.num_rejects < picard.num_rejects) {
+        call merge_vcf {
+            input: vcf_files = [picard.out_file, picard2.out_file],
+                   out_prefix = out_prefix
+        }
+    }
+
     output {
-        File out_file = picard2.out_file
+        File out_file = select_first([merge_vcf.out_file, picard.out_file])
         File rejects_file = picard2.rejects_file
+        Int num_rejects = picard2.num_rejects
     }
 
      meta {
@@ -41,6 +49,7 @@ workflow liftover_vcf {
           email: "sdmorris@uw.edu"
     }
 }
+
 
 task picard {
     input {
@@ -66,11 +75,13 @@ task picard {
             --RECOVER_SWAPPED_REF_ALT true \
             --ALLOW_MISSING_FIELDS_IN_HEADER true \
             --MAX_RECORDS_IN_RAM 10000
+        zcat rejected_variants.vcf.gz | grep -v "^#" | wc -l > num_rejects.txt
     >>>
 
     output {
         File out_file = "~{out_prefix}.vcf.gz"
         File rejects_file = "rejected_variants.vcf.gz"
+        Int num_rejects = read_int("num_rejects.txt")
     }
 
     runtime {
@@ -78,6 +89,7 @@ task picard {
         memory: "~{mem_gb}GB"
     }
 }
+
 
 task strand_flip {
     input {
@@ -96,15 +108,36 @@ task strand_flip {
         fi
         zcat ~{rejects_file} | cut -f3 > flip.txt
         plink --vcf ~{vcf_file} --double-id \
-            --flip flip.txt --output-chr $chr_prefix \
-            --recode vcf-iid bgz --out ~{out_prefix}
+            --extract flip.txt --flip flip.txt \
+            --output-chr $chr_prefix \
+            --recode vcf-iid bgz --out ~{out_prefix}_flipped
+    >>>
+
+    output {
+        File out_file = "~{out_prefix}_flipped.vcf.gz"
+    }
+
+    runtime {
+        docker: "quay.io/biocontainers/plink:1.90b6.21--hec16e2b_2"
+    }
+}
+
+
+task merge_vcf {
+    input {
+        Array[File] vcf_files
+        String out_prefix
+    }
+
+    command <<<
+        bcftools concat --allow-overlaps ~{sep=' ' vcf_files}
     >>>
 
     output {
         File out_file = "~{out_prefix}.vcf.gz"
     }
 
-    runtime {
-        docker: "quay.io/biocontainers/plink:1.90b6.21--hec16e2b_2"
+     runtime {
+        docker: "staphb/bcftools:1.16"
     }
 }
