@@ -115,6 +115,7 @@ task strand_flip {
 
     output {
         File out_file = "~{out_prefix}_flipped.vcf.gz"
+        File flip_file = "flip.txt"
     }
 
     runtime {
