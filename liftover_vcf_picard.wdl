@@ -130,7 +130,9 @@ task merge_vcf {
     }
 
     command <<<
-        bcftools concat --allow-overlaps ~{sep=' ' vcf_files}
+        for f in ~{sep=' ' vcf_files}; do bcftools index $f; done
+        bcftools concat --allow-overlaps ~{sep=' ' vcf_files} \
+            -O z -o ~{out_prefix}.vcf.gz
     >>>
 
     output {
