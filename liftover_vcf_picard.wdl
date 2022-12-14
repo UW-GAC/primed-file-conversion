@@ -18,7 +18,7 @@ workflow liftover_vcf {
     }
 
     call strand_flip {
-        input: vcf_file = picard.out_file,
+        input: vcf_file = vcf_file,
                rejects_file = picard.rejects_file,
                out_prefix = out_prefix
     }
@@ -106,7 +106,7 @@ task strand_flip {
         else
             chr_prefix='M'
         fi
-        zcat ~{rejects_file} | cut -f3 > flip.txt
+        zcat ~{rejects_file} | grep -v "^#" | cut -f3 > flip.txt
         plink --vcf ~{vcf_file} --double-id \
             --extract flip.txt --flip flip.txt \
             --output-chr $chr_prefix \
@@ -115,7 +115,6 @@ task strand_flip {
 
     output {
         File out_file = "~{out_prefix}_flipped.vcf.gz"
-        File flip_file = "flip.txt"
     }
 
     runtime {
