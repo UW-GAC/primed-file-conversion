@@ -7,8 +7,8 @@ workflow plink2_bed2vcf {
         File fam_file
         File? fasta_file
         String? out_prefix
-        Boolean snps_only
-        Boolean chr_prefix
+        Boolean? snps_only
+        Boolean? chr_prefix
     }
 
     call results {
@@ -39,8 +39,8 @@ task results {
         File fam_file
         File? fasta_file
         String? out_prefix
-        Boolean snps_only
-        Boolean chr_prefix
+        Boolean snps_only = true
+        Boolean chr_prefix = true
     }
 
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
