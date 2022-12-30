@@ -29,6 +29,7 @@ Outputs:
 output | description
 --- | ---
 out_file | VCF file
+md5sum | md5 checksum of out_file
 
 
 ## liftover_vcf
@@ -66,5 +67,6 @@ Outputs:
 output | description
 --- | ---
 out_file | VCF file with coordinates in target build
+md5sum | md5 checksum of out_file
 rejects_file | VCF file with variants that could not be lifted over
 num_rejects | number of variants in the rejects file

@@ -38,10 +38,17 @@ workflow liftover_vcf {
         }
     }
 
+    File lifted_file = select_first([merge_vcf.out_file, picard.out_file])
+
+    call md5 {
+        input: file = lifted_file
+    }
+
     output {
-        File out_file = select_first([merge_vcf.out_file, picard.out_file])
+        File out_file = lifted_file
         File rejects_file = picard2.rejects_file
         Int num_rejects = picard2.num_rejects
+        String md5sum = md5.md5sum
     }
 
      meta {
@@ -141,5 +148,24 @@ task merge_vcf {
 
      runtime {
         docker: "staphb/bcftools:1.16"
+    }
+}
+
+
+task md5 {
+    input {
+        File file
+    }
+
+    command <<<
+        md5sum ~{file} | cut -d " " -f 1 > md5.txt
+    >>>
+
+    output {
+        String md5sum = read_string("md5.txt")
+    }
+
+    runtime {
+        docker: "ubuntu:18.04"
     }
 }
