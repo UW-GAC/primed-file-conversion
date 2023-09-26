@@ -11,7 +11,7 @@ workflow plink2_bed2vcf {
         Boolean? chr_prefix
     }
 
-    call results {
+    call bed2vcf {
         input: bed_file = bed_file,
                bim_file = bim_file,
                fam_file = fam_file,
@@ -22,8 +22,8 @@ workflow plink2_bed2vcf {
     }
 
     output {
-        File out_file = results.out_file
-        String md5sum = results.md5sum
+        File out_file = bed2vcf.out_file
+        String md5sum = bed2vcf.md5sum
     }
 
      meta {
@@ -32,7 +32,7 @@ workflow plink2_bed2vcf {
      }
 }
 
-task results {
+task bed2vcf {
     input {
         File bed_file
         File bim_file
