@@ -10,6 +10,11 @@ workflows:
      primaryDescriptorPath: /plink2_vcf2bed.wdl
      testParameterFiles:
          - /plink2_vcf2bed.json
+   - name: plink2_vcf2pgen
+     subclass: WDL
+     primaryDescriptorPath: /plink2_vcf2pgen.wdl
+     testParameterFiles:
+         - /plink2_vcf2pgen.json
    - name: liftover_vcf
      subclass: WDL
      primaryDescriptorPath: /liftover_vcf_picard.wdl
