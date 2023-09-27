@@ -32,6 +32,48 @@ out_file | VCF file
 md5sum | md5 checksum of out_file
 
 
+## plink2_vcf2bed
+
+This workflow uses [plink2](https://www.cog-genomics.org/plink/2.0/) to convert a file from Variant Call Format (VCF) to binary PLINK format (bed/bim/fam).
+
+Inputs:
+
+input | description
+--- | ---
+vcf_file | vcf file
+out_prefix | (optional) prefix for output bed/bim/fam files. If not provided, taken from the input vcf filename.
+
+Outputs:
+
+output | description
+--- | ---
+out_bed | bed file
+out_bim | bim file
+out_fam | fam file
+md5sum | md5 checksums of out_bed, out_bim, out_fam
+
+
+## plink2_vcf2pgen
+
+This workflow uses [plink2](https://www.cog-genomics.org/plink/2.0/) to convert a file from Variant Call Format (VCF) to binary PLINK2 format (pgen/pvar/psam).
+
+Inputs:
+
+input | description
+--- | ---
+vcf_file | vcf file
+out_prefix | (optional) prefix for output bed/bim/fam files. If not provided, taken from the input vcf filename.
+
+Outputs:
+
+output | description
+--- | ---
+out_pgen | pgen file
+out_pvar | pvar file
+out_psam | psam file
+md5sum | md5 checksums of out_pgen, out_pvar, out_psam
+
+
 ## liftover_vcf
 
 This workflow uses [GATK Picard](https://gatk.broadinstitute.org/hc/en-us/articles/9570440033179-LiftoverVcf-Picard-) to lift over VCF files from one build to another. Run the workflow with [reference disks enabled](https://support.terra.bio/hc/en-us/articles/360056384631).
