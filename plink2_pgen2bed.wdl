@@ -1,6 +1,6 @@
 version 1.0
 
-workflow plink2_vcf2bed {
+workflow plink2_pgen2bed {
     input {
 		File pgen
 		File pvar
