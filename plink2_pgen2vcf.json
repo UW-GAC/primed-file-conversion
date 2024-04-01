@@ -1,0 +1,5 @@
+{
+    "plink2_pgen2vcf.pgen": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED-v2/hg19/hm3/ACB.22.pgen",
+    "plink2_pgen2vcf.pvar": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED-v2/hg19/hm3/ACB.22.pvar",
+    "plink2_pgen2vcf.psam": "gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/PROCESSED-v2/hg19/hm3/ACB.22.psam"
+}
