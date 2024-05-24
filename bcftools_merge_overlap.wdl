@@ -33,7 +33,7 @@ task merge {
         bgzip isec/0000.vcf
         bcftools index isec/0000.vcf.gz
         bgzip isec/0001.vcf
-        bcftools index isec/0002.vcf.gz
+        bcftools index isec/0001.vcf.gz
         bcftools merge -m all isec/0000.vcf.gz isec/0001.vcf.gz -O z -o ~{out_prefix}.vcf.gz
     >>>
 
@@ -42,6 +42,6 @@ task merge {
     }
 
      runtime {
-        docker: "staphb/bcftools:1.16"
+        docker: "nanozoo/bcftools:1.19--1dccf69"
     }
 }
