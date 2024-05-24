@@ -30,3 +30,6 @@ workflows:
      primaryDescriptorPath: /liftover_vcf_picard.wdl
      testParameterFiles:
          - /liftover_vcf_picard.json
+   - name: bcftools_merge_overlap
+     subclass: WDL
+     primaryDescriptorPath: /bcftools_merge_overlap.wdl
