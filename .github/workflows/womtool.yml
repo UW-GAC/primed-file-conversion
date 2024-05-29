@@ -1,0 +1,49 @@
+name: Womtool
+
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore: [ "docs/**" ]
+
+  push:
+    branches: [ "main" ]
+    paths-ignore: [ "docs/**" ]
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+
+  run-womtool:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        wdl-file: [
+          ./plink2_pgen2bed.wdl,
+          ./liftover_vcf_picard.wdl,
+          ./plink2_vcf2bed.wdl,
+          ./bcftools_merge_overlap.wdl,
+          ./plink2_pgen2vcf.wdl,
+          ./plink2_bed2vcf.wdl,
+          ./plink2_vcf2pgen.wdl,
+          ./crossmap.wdl
+        ]
+
+    name: "Run womtool: ${{ matrix.wdl-file }}"
+
+    steps:
+
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Run womtool
+        uses: UW-GAC/womtool-action@main
+        with:
+            wdl-file: ${{ matrix.wdl-file }}
