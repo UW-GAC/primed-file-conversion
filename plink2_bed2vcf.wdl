@@ -41,8 +41,10 @@ task bed2vcf {
         String? out_prefix
         Boolean snps_only = true
         Boolean chr_prefix = true
+        Int mem_gb = 16
     }
 
+    Int disk_size = ceil(3*(size(bed_file, "GB") + size(bim_file, "GB") + size(fam_file, "GB"))) + 10
     String out_string = if defined(out_prefix) then out_prefix else basename(bed_file, ".bed")
 
     command {
@@ -69,5 +71,7 @@ task bed2vcf {
 
     runtime {
         docker: "quay.io/biocontainers/plink2:2.00a3.3--hb2a7ceb_0"
+        disks: "local-disk " + disk_size + " SSD"
+        memory: mem_gb + " GB"
     }
 }
