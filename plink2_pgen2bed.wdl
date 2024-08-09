@@ -2,9 +2,9 @@ version 1.0
 
 workflow plink2_pgen2bed {
     input {
-		File pgen
-		File pvar
-		File psam
+        File pgen
+        File pvar
+        File psam
         String? out_prefix
     }
 
@@ -30,12 +30,14 @@ workflow plink2_pgen2bed {
 
 task pgen2bed {
     input {
-		File pgen
-		File pvar
-		File psam
+        File pgen
+        File pvar
+        File psam
         String? out_prefix
+        Int mem_gb = 16
     }
 
+    Int disk_size = ceil(3*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB"))) + 10
     String out_string = if defined(out_prefix) then out_prefix else basename(pgen, ".pgen")
 
     command {
@@ -60,6 +62,8 @@ task pgen2bed {
     }
 
     runtime {
-        docker: "quay.io/biocontainers/plink2:2.00a3.3--hb2a7ceb_0"
+        docker: "quay.io/biocontainers/plink2:2.00a5.10--h4ac6f70_0"
+        disks: "local-disk " + disk_size + " SSD"
+        memory: mem_gb + " GB"
     }
 }

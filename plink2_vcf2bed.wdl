@@ -28,8 +28,10 @@ task vcf2bed {
     input {
         File vcf_file
         String? out_prefix
+        Int mem_gb = 16
     }
 
+    Int disk_size = ceil(3*(size(vcf_file, "GB"))) + 10
     String out_string = if defined(out_prefix) then out_prefix else basename(vcf_file, ".vcf.gz")
 
     command {
@@ -54,6 +56,8 @@ task vcf2bed {
     }
 
     runtime {
-        docker: "quay.io/biocontainers/plink2:2.00a3.3--hb2a7ceb_0"
+        docker: "quay.io/biocontainers/plink2:2.00a5.10--h4ac6f70_0"
+        disks: "local-disk " + disk_size + " SSD"
+        memory: mem_gb + " GB"
     }
 }
