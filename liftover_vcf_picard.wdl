@@ -8,6 +8,7 @@ workflow liftover_vcf {
         String out_prefix
         Int? mem_gb
         Int? max_records_in_ram
+        Int? disk_gb
     }
 
     call picard {
@@ -16,7 +17,8 @@ workflow liftover_vcf {
                target_fasta = target_fasta,
                out_prefix = out_prefix,
                mem_gb = mem_gb,
-               max_records_in_ram = max_records_in_ram
+               max_records_in_ram = max_records_in_ram,
+               disk_gb = disk_gb
     }
 
     call strand_flip {
@@ -31,8 +33,9 @@ workflow liftover_vcf {
                target_fasta = target_fasta,
                out_prefix = out_prefix,
                mem_gb = mem_gb,
-               max_records_in_ram = max_records_in_ram
-    }
+               max_records_in_ram = max_records_in_ram,
+               disk_gb = disk_gb
+}
 
     if (picard2.num_rejects < picard.num_rejects) {
         call merge_vcf {
@@ -69,6 +72,7 @@ task picard {
         String out_prefix
         Int mem_gb = 16
         Int max_records_in_ram = 10000
+        Int disk_gb = 10
     }
 
     String chain_file = basename(chain_url)
@@ -99,6 +103,7 @@ task picard {
     runtime {
         docker: "broadinstitute/picard:2.27.5"
         memory: "~{mem_gb}GB"
+        disks: "local-disk " + disk_gb + " HDD"
     }
 }
 
