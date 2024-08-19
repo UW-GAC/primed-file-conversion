@@ -7,7 +7,7 @@ workflow liftover_vcf {
         File target_fasta
         String out_prefix
         Int? mem_gb
-        max_records_in_ram = 10000
+        Int? max_records_in_ram
     }
 
     call picard {
@@ -68,7 +68,7 @@ task picard {
         File target_fasta
         String out_prefix
         Int mem_gb = 16
-        max_records_in_ram = 10000
+        Int max_records_in_ram = 10000
     }
 
     String chain_file = basename(chain_url)
