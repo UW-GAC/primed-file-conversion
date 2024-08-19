@@ -7,6 +7,7 @@ workflow liftover_vcf {
         File target_fasta
         String out_prefix
         Int? mem_gb
+        max_records_in_ram = 10000
     }
 
     call picard {
@@ -14,7 +15,8 @@ workflow liftover_vcf {
                chain_url = chain_url,
                target_fasta = target_fasta,
                out_prefix = out_prefix,
-               mem_gb = mem_gb
+               mem_gb = mem_gb,
+               max_records_in_ram = max_records_in_ram
     }
 
     call strand_flip {
@@ -28,7 +30,8 @@ workflow liftover_vcf {
                chain_url = chain_url,
                target_fasta = target_fasta,
                out_prefix = out_prefix,
-               mem_gb = mem_gb
+               mem_gb = mem_gb,
+               max_records_in_ram = max_records_in_ram
     }
 
     if (picard2.num_rejects < picard.num_rejects) {
@@ -65,6 +68,7 @@ task picard {
         File target_fasta
         String out_prefix
         Int mem_gb = 16
+        max_records_in_ram = 10000
     }
 
     String chain_file = basename(chain_url)
@@ -81,7 +85,7 @@ task picard {
             --REFERENCE_SEQUENCE ~{target_fasta} \
             --RECOVER_SWAPPED_REF_ALT true \
             --ALLOW_MISSING_FIELDS_IN_HEADER true \
-            --MAX_RECORDS_IN_RAM 10000
+            --MAX_RECORDS_IN_RAM ~{max_records_in_ram}
         zcat rejected_variants.vcf.gz | grep -v "^#" | wc -l > num_rejects.txt
     >>>
 
