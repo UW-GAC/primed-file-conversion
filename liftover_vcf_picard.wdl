@@ -111,7 +111,6 @@ task strand_flip {
     }
 
     command <<<
-        set -e -o pipefail
         has_chr=$(zcat ~{vcf_file} | grep -F 'contig=<ID=chr' -c -m 1)
         if [ "$has_chr" -gt 0 ]
         then
@@ -143,7 +142,6 @@ task merge_vcf {
     }
 
     command <<<
-        set -e -o pipefail
         for f in ~{sep=' ' vcf_files}; do bcftools index $f; done
         bcftools concat --allow-overlaps ~{sep=' ' vcf_files} \
             -O z -o ~{out_prefix}.vcf.gz
