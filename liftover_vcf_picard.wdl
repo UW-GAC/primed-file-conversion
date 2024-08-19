@@ -103,7 +103,7 @@ task picard {
     runtime {
         docker: "broadinstitute/picard:2.27.5"
         memory: "~{mem_gb}GB"
-        disks: "local-disk " + disk_gb + " HDD"
+        disks: "local-disk " + disk_gb + " SDD"
     }
 }
 
