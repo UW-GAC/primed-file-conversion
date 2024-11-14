@@ -1,18 +1,20 @@
 version 1.0
 
+
 workflow bcftools_merge {
     input {
-        Array[File] vcf_files
-        String out_prefix
+        Array[Array[File]] files_to_merge
     }
 
-    call merge_vcfs {
-        input: vcf_files = vcf_files,
-               out_prefix = out_prefix
+    scatter (x in files_to_merge) {
+        call merge_vcfs {
+            input: vcf_files = x,
+                out_prefix = "output"
+        }
     }
 
     output {
-        File out_file = merge_vcfs.out_file
+        Array[File] out_files = merge_vcfs.out_file
     }
 
     meta {
