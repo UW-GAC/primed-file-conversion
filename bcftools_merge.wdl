@@ -1,0 +1,45 @@
+version 1.0
+
+workflow bcftools_merge {
+    input {
+        Array[File] vcf_files
+        String out_prefix
+    }
+
+    call merge_vcfs {
+        input: vcf_files = vcf_files,
+               out_prefix = out_prefix
+    }
+
+    output {
+        File out_file = merge_vcfs.out_file
+    }
+
+    meta {
+        author: "Adrienne Stilp"
+        email: "amstilp@uw.edu"
+    }
+}
+
+task merge_vcfs {
+    input {
+        Array[File] vcf_files
+        String out_prefix
+    }
+
+#    Int disk_size = ceil(3*(size(vcf_files, "GB"))) + 10
+
+    command {
+        set -e -o pipefail
+        cat ${sep=" " vcf_files}  > ${out_prefix}.vcf.gz
+    }
+
+    output {
+        File out_file = "${out_prefix}.vcf.gz"
+        String md5sum = "${out_prefix}.vcf.gz"
+    }
+
+    runtime {
+        docker: "biocontainers/bcftools:v1.9-1-deb_cv1"
+    }
+}

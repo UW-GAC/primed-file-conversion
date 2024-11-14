@@ -1,0 +1,4 @@
+{
+    "bcftools_merge.vcf_files": ["tmp1.txt", "tmp2.txt"],
+    "bcftools_merge.out_prefix": "merged"
+}
