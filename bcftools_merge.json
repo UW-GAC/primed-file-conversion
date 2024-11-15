@@ -1,6 +1,8 @@
 {
     "bcftools_merge.files_to_merge": [
-        ["tmp1.txt", "tmp2.txt"],
-        ["tmp3.txt", "tmp4.txt"]
+        ["tmp/AMR_subset1000_chr22.vcf.gz", "tmp/EUR_subset1000_chr22.vcf.gz"]
+    ],
+    "bcftools_merge.output_prefixes": [
+        "merged_chr22"
     ]
 }
