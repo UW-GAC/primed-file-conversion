@@ -38,15 +38,16 @@ task merge_vcfs {
     command <<<
         set -e -o pipefail
 
+        echo "Creating index files..."
         # # Create index files for each VCF file.
         for vcf_file in ~{sep=" " vcf_files}; do
             echo ${vcf_file}
-            bcftools index ${vcf_file}
+            bcftools index -c ${vcf_file}
         done
 
         cat ~{write_lines(vcf_files)} > files.txt
 
-        echo "merging files"
+        echo "Merging files..."
         # Merge files.
         bcftools merge \
             -l files.txt \
