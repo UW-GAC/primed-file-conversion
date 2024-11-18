@@ -52,7 +52,11 @@ task merge_vcfs {
         ls -lh
 
         echo "writing input file"
-        cat ~{write_lines(vcf_files)} > files.txt
+        for vcf_file in ~{sep=" " vcf_files}; do
+            echo ${vcf_file}\#\#$(basename ${vcf_file}).csi
+        done > files.txt
+
+        cat files.txt
 
         echo "Merging files..."
         # Merge files.
