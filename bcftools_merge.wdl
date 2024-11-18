@@ -38,6 +38,9 @@ task merge_vcfs {
     command <<<
         set -e -o pipefail
 
+        echo "beginning ls"
+        ls
+
         echo "writing input file"
         cat ~{write_lines(vcf_files)} > files.txt
         cat files.txt
@@ -48,7 +51,7 @@ task merge_vcfs {
         bcftools merge \
             --no-index \
             -l files.txt \
-            -O z -o ${out_prefix}.vcf.gz
+            -O z -o ./${out_prefix}.vcf.gz
 
         echo "Final debugging ls"
         ls
