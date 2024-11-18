@@ -38,6 +38,7 @@ task merge_vcfs {
     command <<<
         set -e -o pipefail
 
+        whoami
         ls -lh
 
         echo "Creating index files..."
