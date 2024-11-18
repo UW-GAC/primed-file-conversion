@@ -51,11 +51,11 @@ task merge_vcfs {
             -O z -o ${out_prefix}.vcf.gz
 
         echo "Final debugging ls"
+        ls
     >>>
 
     output {
         File out_file = "${out_prefix}.vcf.gz"
-        String md5sum = "${out_prefix}.vcf.gz"
     }
 
     runtime {
