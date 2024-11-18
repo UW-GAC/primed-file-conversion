@@ -40,10 +40,10 @@ task merge_vcfs {
 
         echo "Creating index files..."
         # # Create index files for each VCF file.
-        for vcf_file in ~{sep=" " vcf_files}; do
-            echo ${vcf_file}
-            bcftools index -c ${vcf_file}
-        done
+        # for vcf_file in ~{sep=" " vcf_files}; do
+        #     echo ${vcf_file}
+        #     bcftools index -c ${vcf_file}
+        # done
 
         cat ~{write_lines(vcf_files)} > files.txt
 
