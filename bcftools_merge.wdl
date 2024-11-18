@@ -58,7 +58,7 @@ task merge_vcfs {
     }
 
     runtime {
-        docker: "biocontainers/bcftools:v1.9-1-deb_cv1"
+        docker: "nanozoo/bcftools:1.19--1dccf69"
         disks: "local-disk " + disk_size + " SSD"
         memory: mem_gb + " GB"
 
