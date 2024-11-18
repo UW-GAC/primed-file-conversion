@@ -49,11 +49,12 @@ task merge_vcfs {
             --no-index \
             -l files.txt \
             -O z -o ${out_prefix}.vcf.gz
+
+        echo "Final debugging ls"
     >>>
 
     output {
         File out_file = "${out_prefix}.vcf.gz"
-        File out_index_file = "${out_prefix}.vcf.gz.csi"
         String md5sum = "${out_prefix}.vcf.gz"
     }
 
