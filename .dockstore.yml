@@ -33,3 +33,6 @@ workflows:
    - name: bcftools_merge_overlap
      subclass: WDL
      primaryDescriptorPath: /bcftools_merge_overlap.wdl
+   - name: bcftools_merge
+     subclass: WDL
+     primaryDescriptorPath: /bcftools_merge.wdl
