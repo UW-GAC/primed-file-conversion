@@ -38,6 +38,8 @@ task merge_vcfs {
     command <<<
         set -e -o pipefail
 
+        ls
+
         echo "Creating index files..."
         # Create index files for each VCF file.
         for vcf_file in ~{sep=" " vcf_files}; do
