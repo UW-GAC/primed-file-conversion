@@ -38,29 +38,15 @@ task merge_vcfs {
     command <<<
         set -e -o pipefail
 
-        echo "ls before index"
-        ls -lh
-
-        echo "Creating index files..."
-        # Create index files for each VCF file.
-        for vcf_file in ~{sep=" " vcf_files}; do
-            echo ${vcf_file}
-            bcftools index -c ${vcf_file} -o ./$(basename ${vcf_file}).csi
-        done
-
-        echo "ls after index"
-        ls -lh
-
         echo "writing input file"
-        for vcf_file in ~{sep=" " vcf_files}; do
-            echo ${vcf_file}\#\#$(basename ${vcf_file}).csi
-        done > files.txt
-
+        cat ~{write_lines(vcf_files)} > files.txt
         cat files.txt
+
 
         echo "Merging files..."
         # Merge files.
         bcftools merge \
+            --no-index \
             -l files.txt \
             -O z -o ${out_prefix}.vcf.gz
     >>>
