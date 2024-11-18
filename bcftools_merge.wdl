@@ -5,14 +5,14 @@ workflow bcftools_merge {
     input {
         Array[Array[File]] files_to_merge
         Array[String] output_prefixes
-
-
+        Int mem_gb = 16
     }
 
     scatter (pair in zip(files_to_merge, output_prefixes)) {
         call merge_vcfs {
             input: vcf_files = pair.left,
-                out_prefix = pair.right
+                out_prefix = pair.right,
+                mem_gb = mem_gb
         }
     }
 
@@ -30,9 +30,10 @@ task merge_vcfs {
     input {
         Array[File] vcf_files
         String out_prefix
+        Int mem_gb = 16
     }
 
-#    Int disk_size = ceil(3*(size(vcf_files, "GB"))) + 10
+    Int disk_size = ceil(3*(size(vcf_files, "GB"))) + 10
 
     command <<<
         set -e -o pipefail
@@ -60,5 +61,8 @@ task merge_vcfs {
 
     runtime {
         docker: "biocontainers/bcftools:v1.9-1-deb_cv1"
+        disks: "local-disk " + disk_size + " SSD"
+        memory: mem_gb + " GB"
+
     }
 }
