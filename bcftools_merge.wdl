@@ -51,7 +51,7 @@ task merge_vcfs {
         bcftools merge \
             --no-index \
             -l files.txt \
-            -o ./${out_prefix}.vcf.gz
+            -o ~{out_prefix}.vcf.gz
 
         echo "Final debugging ls"
         ls
