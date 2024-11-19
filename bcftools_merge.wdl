@@ -18,6 +18,7 @@ workflow bcftools_merge {
 
     output {
         Array[File] out_files = merge_vcfs.out_file
+        Array[File] out_index_files = merge_vcfs.out_index_file
     }
 
     meta {
@@ -38,28 +39,23 @@ task merge_vcfs {
     command <<<
         set -e -o pipefail
 
-        echo "beginning ls"
-        ls
-
         echo "writing input file"
         cat ~{write_lines(vcf_files)} > files.txt
         cat files.txt
 
 
         echo "Merging files..."
-        echo "outfile: " ~{out_prefix}.vcf.gz
         # Merge files.
         bcftools merge \
             --no-index \
             -l files.txt \
-            -o ~{out_prefix}.vcf.gz
-
-        echo "Final debugging ls"
-        ls
+            -o ~{out_prefix}.vcf.gz \
+            -W ~{out_prefix}.vcf.gz.csi
     >>>
 
     output {
         File out_file = "~{out_prefix}.vcf.gz"
+        File out_index_file = "~{out_prefix}.vcf.gz.csi"
     }
 
     runtime {
