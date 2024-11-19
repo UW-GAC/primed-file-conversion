@@ -50,7 +50,7 @@ task merge_vcfs {
             --no-index \
             -l files.txt \
             -o ~{out_prefix}.vcf.gz \
-            -W ~{out_prefix}.vcf.gz.csi
+            --write-index
     >>>
 
     output {
