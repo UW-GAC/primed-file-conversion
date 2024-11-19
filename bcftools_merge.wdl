@@ -47,6 +47,7 @@ task merge_vcfs {
 
 
         echo "Merging files..."
+        echo "outfile: " ~{out_prefix}.vcf.gz
         # Merge files.
         bcftools merge \
             --no-index \
