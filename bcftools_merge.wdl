@@ -42,18 +42,22 @@ task create_index_file {
 
     input {
         File vcf_file
+        String? output_prefix = "index"
     }
 
     Int disk_size = ceil(2 * size(vcf_file, "GB")) + 2
 
     command <<<
+
+        echo {~vcf_file}
+
         bcftools index \
             ~{vcf_file} \
-            -o ~{basename(vcf_file)}.csi
+            -o ~{output_prefix}.csi
     >>>
 
     output {
-        File index_file = "~{basename(vcf_file)}.csi"
+        File index_file = "~{output_prefix}.csi"
     }
 
     runtime {
@@ -83,9 +87,6 @@ task merge_vcfs {
         do
             echo "${VCF_ARRAY[$idx]}##idx##${INDEX_ARRAY[$idx]}"
         done > files.txt
-
-        # echo "writing input file"
-        # cat ~{write_lines(vcf_files)} > files.txt
 
         echo "printing files to merge"
         cat files.txt
