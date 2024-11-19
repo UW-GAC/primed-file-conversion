@@ -6,15 +6,24 @@ workflow bcftools_merge {
         Array[Array[File]] files_to_merge
         Array[String] output_prefixes
         Boolean missing_to_ref = false
+        Boolean create_index_files = false
         Int mem_gb = 16
     }
 
     scatter (pair in zip(files_to_merge, output_prefixes)) {
+
+        scatter (vcf_file in pair.left) {
+            call create_index_file {
+                input: vcf_file = vcf_file
+            }
+        }
+
         call merge_vcfs {
             input: vcf_files = pair.left,
                 out_prefix = pair.right,
                 mem_gb = mem_gb,
-                missing_to_ref = missing_to_ref
+                missing_to_ref = missing_to_ref,
+                index_files = create_index_file.index_file
         }
     }
 
@@ -29,9 +38,34 @@ workflow bcftools_merge {
     }
 }
 
+task create_index_file {
+
+    input {
+        File vcf_file
+    }
+
+    Int disk_size = ceil(2 * size(vcf_file, "GB")) + 2
+
+    command <<<
+        bcftools index \
+            ~{vcf_file} \
+            -o ~{basename(vcf_file)}.csi
+    >>>
+
+    output {
+        File index_file = "~{basename(vcf_file)}.csi"
+    }
+
+    runtime {
+        docker: "nanozoo/bcftools:1.19--1dccf69"
+        disks: "local-disk " + disk_size + " SSD"
+    }
+}
+
 task merge_vcfs {
     input {
         Array[File] vcf_files
+        Array[File] index_files
         String out_prefix
         Int mem_gb = 16
         Boolean missing_to_ref = false
@@ -43,14 +77,23 @@ task merge_vcfs {
         set -e -o pipefail
 
         echo "writing input file"
-        cat ~{write_lines(vcf_files)} > files.txt
+        VCF_ARRAY=(~{sep=" " vcf_files}) # Load array into bash variable
+        INDEX_ARRAY=(~{sep=" " index_files}) # Load array into bash variable
+        for idx in ${!VCF_ARRAY[*]}
+        do
+            echo "${VCF_ARRAY[$idx]}##idx##${INDEX_ARRAY[$idx]}"
+        done > files.txt
+
+        # echo "writing input file"
+        # cat ~{write_lines(vcf_files)} > files.txt
+
+        echo "printing files to merge"
         cat files.txt
 
 
         echo "Merging files..."
         # Merge files.
         bcftools merge \
-            --no-index \
             -l files.txt \
             ~{if missing_to_ref then "--missing-to-ref" else ""} \
             -o ~{out_prefix}.vcf.gz \
