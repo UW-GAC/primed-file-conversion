@@ -59,7 +59,7 @@ task merge_vcfs {
     >>>
 
     output {
-        File out_file = "${out_prefix}.vcf.gz"
+        File out_file = "~{out_prefix}.vcf.gz"
     }
 
     runtime {
