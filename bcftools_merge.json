@@ -4,5 +4,6 @@
     ],
     "bcftools_merge.output_prefixes": [
         "merged_chr22"
-    ]
+    ],
+    "bcftools_merge.missing_to_ref": false
 }

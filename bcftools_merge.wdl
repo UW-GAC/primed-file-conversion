@@ -5,6 +5,7 @@ workflow bcftools_merge {
     input {
         Array[Array[File]] files_to_merge
         Array[String] output_prefixes
+        Boolean missing_to_ref = false
         Int mem_gb = 16
     }
 
@@ -12,7 +13,8 @@ workflow bcftools_merge {
         call merge_vcfs {
             input: vcf_files = pair.left,
                 out_prefix = pair.right,
-                mem_gb = mem_gb
+                mem_gb = mem_gb,
+                missing_to_ref = missing_to_ref
         }
     }
 
@@ -32,6 +34,7 @@ task merge_vcfs {
         Array[File] vcf_files
         String out_prefix
         Int mem_gb = 16
+        Boolean missing_to_ref = false
     }
 
     Int disk_size = ceil(3*(size(vcf_files, "GB"))) + 10
@@ -49,6 +52,7 @@ task merge_vcfs {
         bcftools merge \
             --no-index \
             -l files.txt \
+            ~{if missing_to_ref then "--missing-to-ref" else ""} \
             -o ~{out_prefix}.vcf.gz \
             --write-index
     >>>
