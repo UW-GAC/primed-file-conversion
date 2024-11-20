@@ -26,15 +26,15 @@ jobs:
       fail-fast: false
       matrix:
         wdl-file: [
-          ./plink2_pgen2bed.wdl,
-          ./liftover_vcf_picard.wdl,
-          ./plink2_vcf2bed.wdl,
-          ./bcftools_merge_overlap.wdl,
-          ./bcftools_merge.wdl,
-          ./plink2_pgen2vcf.wdl,
-          ./plink2_bed2vcf.wdl,
-          ./plink2_vcf2pgen.wdl,
-          ./crossmap.wdl
+          bcftools_merge.wdl,
+          bcftools_merge_overlap.wdl,
+          crossmap.wdl,
+          liftover_vcf_picard.wdl,
+          plink2_bed2vcf.wdl,
+          plink2_pgen2bed.wdl,
+          plink2_pgen2vcf.wdl,
+          plink2_vcf2bed.wdl,
+          plink2_vcf2pgen.wdl
         ]
 
     name: "Run womtool: ${{ matrix.wdl-file }}"
