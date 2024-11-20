@@ -14,7 +14,8 @@ workflow bcftools_merge {
 
         scatter (vcf_file in pair.left) {
             call create_index_file {
-                input: vcf_file = vcf_file
+                input: vcf_file = vcf_file,
+                    output_prefix = "index"
             }
         }
 
