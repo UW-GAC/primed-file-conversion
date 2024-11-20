@@ -1,0 +1,9 @@
+{
+    "bcftools_merge.vcf_files": [
+        ["tmp/AMR_subset1000_chr22.vcf.gz", "tmp/EUR_subset1000_chr22.vcf.gz"]
+    ],
+    "bcftools_merge.output_prefixes": [
+        "merged_chr22"
+    ],
+    "bcftools_merge.missing_to_ref": false
+}
