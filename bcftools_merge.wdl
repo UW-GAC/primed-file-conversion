@@ -6,7 +6,6 @@ workflow bcftools_merge {
         Array[Array[File]] files_to_merge
         Array[String] output_prefixes
         Boolean missing_to_ref = false
-        Boolean create_index_files = false
         Int mem_gb = 16
     }
 
