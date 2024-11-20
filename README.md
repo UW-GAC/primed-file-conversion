@@ -6,7 +6,7 @@ PRIMED file conversion workflows
 
 This workflow uses [plink2](https://www.cog-genomics.org/plink/2.0/) to convert a file from binary PLINK format (bed/bim/fam) to VCF.
 
-Default behavior is to output SNPs only, omitting any "I/D" codes for indels, as these are not accepted by downstream workflows such as liftover and imputation. 
+Default behavior is to output SNPs only, omitting any "I/D" codes for indels, as these are not accepted by downstream workflows such as liftover and imputation.
 
 Any pseudoautomsomal SNPs ('XY' code) will be merged with the X chromosome using plink2's "merge-x" option. The default is to add 'chr' prefixes to chromosome codes, as this is the standard for hg19 and hg38 and facilitates using UCSC chain files for liftover.
 
@@ -156,3 +156,25 @@ out_file | VCF file with coordinates in target build
 md5sum | md5 checksum of out_file
 rejects_file | VCF file with variants that could not be lifted over
 num_rejects | number of variants in the rejects file
+
+
+## bcftools_merge
+
+This workflow uses [bcftools](https://samtools.github.io/bcftools/bcftools.html#merge) to merge VCFs into a single VCF. Before merging, it creates an index for each VCF. It can run in parallel for multiple sets of VCFs.
+
+Inputs:
+
+input | description
+--- | ---
+vcf_files | An array of arrays of VCF files to merge. Each array of VCF files will be merged into a single VCF file.
+output_prefixes | Array of output prefixes for the merged VCF files. This should be an array of the same length as vcf_files.
+missing_to_ref | Set genotypes at missing sites to the reference allele (0/0). Default is false.
+merge_options | (optional) if specified, additional options to pass to `bcftools merge`
+mem_gb | (optional, default 16 GB) RAM required for merging. If the job fails due to lack of memory, try setting this to a larger value.
+
+Outputs:
+
+output | description
+--- | ---
+out_file | Array of merged VCF files, same length as vcf_files
+out_index_file | Array of index files for the merged VCF files, same length as vcf_files
