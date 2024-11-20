@@ -6,6 +6,7 @@ workflow bcftools_merge {
         Array[Array[File]] files_to_merge
         Array[String] output_prefixes
         Boolean missing_to_ref = false
+        String? merge_options
         Int mem_gb = 16
     }
 
@@ -22,6 +23,7 @@ workflow bcftools_merge {
                 out_prefix = pair.right,
                 mem_gb = mem_gb,
                 missing_to_ref = missing_to_ref,
+                merge_options = merge_options,
                 index_files = create_index_file.index_file
         }
     }
@@ -69,6 +71,7 @@ task merge_vcfs {
     input {
         Array[File] vcf_files
         Array[File] index_files
+        String? merge_options
         String out_prefix
         Int mem_gb = 16
         Boolean missing_to_ref = false
@@ -96,6 +99,7 @@ task merge_vcfs {
         bcftools merge \
             -l files.txt \
             ~{if missing_to_ref then "--missing-to-ref" else ""} \
+            ~{if defined(merge_options) then merge_options else ""} \
             -o ~{out_prefix}.vcf.gz \
             --write-index
     >>>
