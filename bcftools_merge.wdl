@@ -3,14 +3,14 @@ version 1.0
 
 workflow bcftools_merge {
     input {
-        Array[Array[File]] files_to_merge
+        Array[Array[File]] vcf_files
         Array[String] output_prefixes
         Boolean missing_to_ref = false
         String? merge_options
         Int mem_gb = 16
     }
 
-    scatter (pair in zip(files_to_merge, output_prefixes)) {
+    scatter (pair in zip(vcf_files, output_prefixes)) {
 
         scatter (vcf_file in pair.left) {
             call create_index_file {
