@@ -27,9 +27,12 @@ task merge {
     }
 
     command <<<
-        bcftools index ~{vcf_file_1}
-        bcftools index ~{vcf_file_2}
-        bcftools isec -p isec -n=2 ~{vcf_file_1} ~{vcf_file_2}
+        set -e -o pipefail
+        bcftools annotate --set-id '%CHROM:%POS:%REF:%ALT' ~{vcf_file_1} -O z -o file1.vcf.gz 
+        bcftools annotate --set-id '%CHROM:%POS:%REF:%ALT' ~{vcf_file_2} -O z -o file2.vcf.gz 
+        bcftools index file1.vcf.gz
+        bcftools index file2.vcf.gz
+        bcftools isec -p isec -n=2 file1.vcf.gz file2.vcf.gz
         bgzip isec/0000.vcf
         bcftools index isec/0000.vcf.gz
         bgzip isec/0001.vcf
